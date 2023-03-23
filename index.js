@@ -106,6 +106,20 @@ async function run() {
       res.send(result);
     });
 
+    //Save Users Information when signinwith google.
+    app.post("/googleBuyer", async (req, res) => {
+      const user = req.body;
+      const email = user.email;
+      const filter = await usersCollection.findOne({ email: email });
+      if (filter === null) {
+        user.role = "buyers";
+        const result = await usersCollection.insertOne(user);
+        res.send(result);
+      } else {
+        res.status(400).json({ errors: [{ msg: "User already exist" }] });
+      }
+    });
+
     //All Users Api
     app.get("/users", async (req, res) => {
       const query = {};

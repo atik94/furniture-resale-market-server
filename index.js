@@ -44,6 +44,7 @@ async function run() {
     const categoriesCollection = client.db("furniture-resale-market").collection("categories");
     const productsCollection = client.db("furniture-resale-market").collection("products");
     const bookingCollection = client.db("furniture-resale-market").collection("bookings");
+    const paymentsCollection = client.db("furniture-resale-market").collection("payments");
 
     // NOTE: make sure you use verifyAdmin after verifyJWT
     const verifyAdmin = async (req, res, next) => {
@@ -92,7 +93,7 @@ async function run() {
       res.status(403).send({ accessToken: "" });
     });
 
-    // Save Users Both EmailPassword and GoogleSignIn based authentication.
+    // Save Users EmailPassword based authentication.
     app.post("/users", async (req, res) => {
       const user = req.body;
       const query = {
@@ -127,6 +128,7 @@ async function run() {
       const users = await usersCollection.find(query).toArray();
       res.send(users);
     });
+
     //Admin Role Api
     app.get("/users/admin/:email", async (req, res) => {
       const email = req.params.email;
